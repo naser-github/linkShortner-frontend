@@ -13,7 +13,7 @@
             <div class="col-12 mt-3">
               <div class="small-box bg-info">
                 <div class="inner">
-                  <h3>{{ this.url.dailyClicks }}</h3>
+                  <h3>{{ this.clickDetails.dailyClicks }}</h3>
 
                   <p>TODAY'S VISIT</p>
                 </div>
@@ -26,7 +26,7 @@
             <div class="col-12">
               <div class="small-box bg-success">
                 <div class="inner">
-                  <h3>{{ this.url.totalClicks }}</h3>
+                  <h3>{{ this.clickDetails.totalClicks }}</h3>
 
                   <p>TOTAL VISIT</p>
                 </div>
@@ -39,58 +39,46 @@
             <div class="col-12">
               <div class="small-box bg-warning">
                 <div class="inner">
-                  <h3>{{ this.url.avgClicks }}</h3>
+                  <h3>{{ this.clickDetails.avgClicks }}</h3>
 
                   <p>Average Visit</p>
                 </div>
                 <div class="icon">
-                  <i class="ion ion-pie-graph"></i>
+                  <i class="fas fa-chart-pie"></i>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="col-1"></div>
-        <!-- <div class="col-7 mt-lg-2 pr-lg-5">
-          <div>
-            <GChart
-              type="ColumnChart"
-              :data="chartData"
-              :options="chartOptions"
-            />
-          </div>
-        </div> -->
+        <div class="col-7">
+          <doughnut-chart :devices="get_clientDevices" :key="$route.fullPath"></doughnut-chart>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import { GChart } from "vue-google-charts";
+import { Chart, Legend, Title, Tooltip } from "chart.js";
+Chart.register(Legend, Title, Tooltip);
+
+import DoughnutChart from "./DoughnutChart.vue";
 
 export default {
-  props: ["url"],
   components: {
-    // GChart,
+    DoughnutChart,
   },
-  data() {
-    return {
-      // Array will be automatically processed with visualization.arrayToDataTable function
-      chartData: [
-        ["Year", "Sales", "Expenses", "Profit"],
-        ["2014", 1000, 400, 200],
-        ["2015", 1170, 460, 250],
-        ["2016", 660, 1120, 300],
-        ["2017", 1030, 540, 350],
-      ],
-      chartOptions: {
-        chart: {
-          title: "Company Performance",
-          subtitle: "Sales, Expenses, and Profit: 2014-2017",
-        },
-      },
-    };
+
+  props: ["clickDetails", "key"],
+
+  computed: {
+    get_clientDevices() {
+      return this.$store.getters["url/get_clientDevices"];
+    },
   },
+  created(){
+    console.log(this.key);
+  }
 };
 </script>
-

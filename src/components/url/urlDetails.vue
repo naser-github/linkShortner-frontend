@@ -40,7 +40,7 @@
 
 <script>
 export default {
-  props: ["url"],
+  props: ["url", "key"],
 };
 </script>
 

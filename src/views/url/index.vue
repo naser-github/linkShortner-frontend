@@ -5,8 +5,8 @@
         <div class="col-12">
           <div class="card mt-3">
             <div class="card-body">
-              <url-details :url='get_urlDetails'></url-details>
-              <url-stat :url='get_urlDetails'></url-stat>
+              <url-details :url='get_urlDetails' :key="$route.fullPath"></url-details>
+              <url-stat :clickDetails='get_clickDetails' :key="$route.fullPath"></url-stat>
             </div>
           </div>
         </div>
@@ -17,8 +17,6 @@
 
 <script>
 
-//google chart
-
 import urlDetails from "../../components/url/urlDetails.vue";
 import urlStat from "../../components/url/urlStat.vue";
 
@@ -28,36 +26,30 @@ export default {
     urlStat,
   },
 
-  data() {
-    return {
-      url: null,
-    };
-  },
-
   computed: {
     get_urlDetails() {
       return this.$store.getters["url/get_urlDetails"];
     },
+
+    get_clickDetails(){
+      return this.$store.getters["url/get_clickDetails"];
+    }
   },
 
   methods: {
     async urlDetailPage() {
       try {
-        this.$store.dispatch("url/urlDetails", {
+        await this.$store.dispatch("url/urlDetails", {
           id: this.$route.params.id,
         });
       } catch (err) {
         this.error = err.message || "Failed to shorten this url";
       }
     },
-
-    save_urlDetails(){
-      this.url = this.get_urlDetails();
-    }
   },
 
-  created() {
-    this.urlDetailPage();
+  async created() {
+    await this.urlDetailPage();
   },
 };
 </script>
