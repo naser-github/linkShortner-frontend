@@ -1,6 +1,6 @@
 <template>
 
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="margin:0 0 0 0;">
     <div class="content">
       <div class="container-fluid">
         <div class="row">

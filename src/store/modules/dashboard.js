@@ -9,15 +9,19 @@ export default {
   namespaced: true,
   state() {
     return {
-      data : {
+      clicksDetails: {
         visitedToday: "",
         linkToday: "",
         totalLinks: "",
-      }
+      },
+      clientDevices: {
+        desktop: 10,
+        mobile: 10,
+        others: 10,
+      },
     };
   },
   actions: {
-    
     async dashboardPage(context) {
       const response = await axios
         .get(`${context.rootState.base_url}/dashboard`, {
@@ -33,26 +37,39 @@ export default {
         });
 
       const responseData = await response.data;
-      
+
       context.commit("save_data", {
         visitedToday: responseData.visitedToday,
         linkToday: responseData.linkToday,
         totalLinks: responseData.totalLinks,
+        deviceTypes: responseData.deviceTypes,
       });
     },
   },
   getters: {
-
-    get_data(state) {
-      return state.data;
+    get_clicksDetails(state) {
+      return state.clicksDetails;
+    },
+    get_clientDevices(state) {
+      return state.clientDevices;
     },
   },
   mutations: {
     save_data(state, payload) {
+      state.clicksDetails.visitedToday = payload.visitedToday;
+      state.clicksDetails.linkToday = payload.linkToday;
+      state.clicksDetails.totalLinks = payload.totalLinks;
 
-      state.data.visitedToday = payload.visitedToday;
-      state.data.linkToday = payload.linkToday;
-      state.data.totalLinks = payload.totalLinks;
+      // clientDevice
+      payload.deviceTypes.forEach((device) => {
+        if (device.client_device == "desktop") {
+          state.clientDevices.desktop = device.total_client_device;
+        } else if (device.client_device == "mobile") {
+          state.clientDevices.mobile = device.total_client_device;
+        } else {
+          state.clientDevices.others = device.total_client_device;
+        }
+      });
     },
   },
 };

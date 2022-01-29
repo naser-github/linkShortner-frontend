@@ -13,6 +13,7 @@ export default {
         urlId: "",
         longUrl: "",
         shortUrl: "",
+        status: "",
       },
       clickDetails: {
         avgClicks: 0,
@@ -42,7 +43,7 @@ export default {
         )
         .catch((err) => {
           console.log(err.response.data.message);
-          toaster.error(`${err.response.data.message}`, {
+          toaster.error(`${"something went wrong"}`, {
             position: "top-right",
           });
         });
@@ -64,7 +65,7 @@ export default {
         })
         .catch((err) => {
           console.log(err.response.data.message);
-          toaster.error(`${err.response.data.message}`, {
+          toaster.error(`${"something went wrong"}`, {
             position: "top-right",
           });
         });
@@ -74,11 +75,46 @@ export default {
       await context.commit("save_urlDetails", {
         link: responseData.link,
         deviceTypes: responseData.deviceTypes,
+        link_status: responseData.link_status,
 
         avgClicks: responseData.averageClicks,
         dailyClicks: responseData.dailyClicks,
         totalClicks: responseData.totalClicks,
       });
+    },
+
+    async updateUrl(context, payload) {
+      const response = await axios
+        .patch(
+          `${context.rootState.base_url}/update-url/${payload.id}`,
+          {
+            longUrl: payload.longUrl,
+            shortUrl: payload.shortUrl,
+            status: payload.status,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${context.rootState.auth.token}`,
+            },
+          }
+        )
+        .catch(function (error) {
+          console.log(error.response.data.message);
+          toaster.error(`${"something went wrong"}`, {
+            position: "top-right",
+          });
+        });
+
+      const responseData = await response.data;
+      if (response.status === 201) {
+        toaster.success(`${responseData.msg}`, {
+          position: "top-right",
+        });
+      }else{
+        toaster.error(`${responseData.msg}`, {
+          position: "top-right",
+        });
+      }
     },
   },
   getters: {
@@ -107,9 +143,10 @@ export default {
       //url
       state.url.longUrl = payload.link.long_url;
       state.url.shortUrl = payload.link.short_url;
+      state.url.status = payload.link.link_status;
 
       //clickDetails
-      state.clickDetails.avgClicks = payload.avgClicks;
+      state.clickDetails.avgClicks = payload.avgClicks.toFixed(2);
       state.clickDetails.dailyClicks = payload.dailyClicks;
       state.clickDetails.totalClicks = payload.totalClicks;
 

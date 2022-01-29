@@ -21,12 +21,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    v-for="url in get_UrlList"
-                    :key="url.id"
-                    @click="urlDetails(url.id)"
-                  >
-                    <td>
+                  <tr v-for="url in get_UrlList" :key="url.id">
+                    <td @click="urlDetails(url.id)">
                       <span
                         class="badge badge-button bg-light text-white text-md"
                         style="border-left: 0.7rem solid #43a047"
@@ -34,7 +30,7 @@
                         {{ url.long_url.substring(0, 25) + ".." }}
                       </span>
                     </td>
-                    <td>
+                    <td @click="urlDetails(url.id)">
                       <span
                         class="badge badge-button bg-light text-white text-md"
                         style="border-left: 0.7rem solid #43a047"
@@ -42,7 +38,7 @@
                         {{ url.short_url }}
                       </span>
                     </td>
-                    <td>
+                    <td @click="urlDetails(url.id)">
                       <span
                         class="badge-pill text-white"
                         :style="
@@ -57,9 +53,8 @@
                     <td>
                       <button
                         class="btn btn-sm text-white"
-                        style="
-                          background: linear-gradient(45deg, #195647, #43a047);
-                        "
+                        style="background: linear-gradient(45deg, #195647, #43a047);"
+                        @click="showModal(url.id)"
                       >
                         <i class="far fa-edit"></i> Edit
                       </button>
@@ -80,16 +75,27 @@
         </div>
       </div>
     </div>
+    <editUrlModal
+      :urlId="editUrlId"
+      v-show="isModalVisible"
+      @close="closeModal"
+    />
   </section>
 </template>
 
-
 <script>
+import editUrlModal from "../../components/url/editUrlModal.vue";
 export default {
-  components: {},
+  components: {
+    editUrlModal,
+  },
 
   data() {
     return {
+      //modal opening key
+      isModalVisible: false,
+      editUrlId: null,
+
       urlLists: null,
       currentSort: "long_url",
       currentSortDir: "asc",
@@ -109,6 +115,7 @@ export default {
   },
 
   methods: {
+    //fetch url data function
     async fetch_UrlList() {
       try {
         await this.$store.dispatch("urlList/fetch_UrlList");
@@ -118,8 +125,18 @@ export default {
       }
     },
 
+    //go to url details function
     urlDetails(id) {
       this.$router.replace(`/url/${id}`);
+    },
+
+    //modal function
+    showModal(id) {
+      this.editUrlId = id;
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
     },
 
     sort(s) {

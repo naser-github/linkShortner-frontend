@@ -40,10 +40,6 @@ const options = ref({
     },
   },
 });
-
-// export default {
-//   props: ["deviceTypes"],
-// };
 </script>
 
 

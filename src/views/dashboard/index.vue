@@ -6,12 +6,21 @@
           <div class="card mt-3">
             <div class="card-body">
               <div class="row">
+                <div class="col-6">
+                  <div class="card">
+                    <div class="card-body bg-gradient-light ">
+                      <dashboard-graph
+                        :devices="get_clientDevices"
+                        :key="$route.fullPath"
+                      ></dashboard-graph>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-1"></div>
                 <div class="col-4">
-                  <dashboard-card :data='get_data'></dashboard-card>
+                  <dashboard-card :data="get_data"></dashboard-card>
                 </div>
-                <div class="col-8">
-                  <dashboard-graph></dashboard-graph>
-                </div>
+                <div class="col-1"></div>
               </div>
             </div>
           </div>
@@ -25,13 +34,16 @@
 import dashboardCard from "../../components/dashboard/dashboardCard.vue";
 import dashboardGraph from "../../components/dashboard/dashboardGraph.vue";
 
+import { Chart, Legend, Title, Tooltip } from "chart.js";
+Chart.register(Legend, Title, Tooltip);
+
 export default {
   components: {
     dashboardCard,
     dashboardGraph,
   },
 
-    data() {
+  data() {
     return {
       data: null,
     };
@@ -39,7 +51,10 @@ export default {
 
   computed: {
     get_data() {
-      return this.$store.getters["dashboard/get_data"];
+      return this.$store.getters["dashboard/get_clicksDetails"];
+    },
+    get_clientDevices() {
+      return this.$store.getters["dashboard/get_clientDevices"];
     },
   },
 
@@ -52,9 +67,9 @@ export default {
       }
     },
 
-    save_urlDetails(){
-      this.data = this.get_data();
-    }
+    save_urlDetails() {
+      this.data = this.get_clicksDetails();
+    },
   },
 
   created() {
