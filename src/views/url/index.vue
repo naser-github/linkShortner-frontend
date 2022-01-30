@@ -33,7 +33,7 @@ export default {
 
     get_clickDetails(){
       return this.$store.getters["url/get_clickDetails"];
-    }
+    },
   },
 
   methods: {

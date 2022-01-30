@@ -110,11 +110,17 @@ export default {
         toaster.success(`${responseData.msg}`, {
           position: "top-right",
         });
-      }else{
+      } else {
         toaster.error(`${responseData.msg}`, {
           position: "top-right",
         });
       }
+
+      await context.commit("update_urlDetails", {
+        longUrl: payload.longUrl,
+        shortUrl: payload.shortUrl,
+        status: payload.status,
+      });
     },
   },
   getters: {
@@ -146,7 +152,9 @@ export default {
       state.url.status = payload.link.link_status;
 
       //clickDetails
-      state.clickDetails.avgClicks = payload.avgClicks.toFixed(2);
+      if (payload.avgClicks)
+        state.clickDetails.avgClicks = payload.avgClicks.toFixed(2);
+      else state.clickDetails.avgClicks = 0;
       state.clickDetails.dailyClicks = payload.dailyClicks;
       state.clickDetails.totalClicks = payload.totalClicks;
 
@@ -160,6 +168,13 @@ export default {
           state.clientDevices.others = device.total_client_device;
         }
       });
+    },
+
+    async update_urlDetails(state, payload) {
+      //url
+      state.url.longUrl = payload.longUrl;
+      state.url.shortUrl = payload.shortUrl;
+      state.url.status = payload.status;
     },
   },
 };

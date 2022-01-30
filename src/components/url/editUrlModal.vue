@@ -1,6 +1,6 @@
 <template>
   <transition name="modal-fade">
-    <div class="modal-backdrop">
+    <div class="modal-backdrop" v-show="value">
       <div
         class="modal"
         role="dialog"
@@ -86,7 +86,7 @@
 <script>
 export default {
   name: "Modal",
-  props: ["urlId"],
+  props: ["urlId", "value"],
 
   data() {
     return {
@@ -94,6 +94,13 @@ export default {
       shortUrl: "",
       status: "",
     };
+  },
+  watch: {
+    value(isActive) {
+      if (isActive && this.urlId) {
+        this.urlDetailPage();
+      }
+    },
   },
   computed: {
     get_url() {
@@ -113,9 +120,6 @@ export default {
       } catch (err) {
         this.error = err.message || "Failed to shorten this url";
       }
-    },
-
-    async save_fetchData() {
       const url = await this.get_url;
 
       this.longUrl = url.longUrl;
@@ -131,15 +135,10 @@ export default {
           shortUrl: this.shortUrl,
           status: this.status,
         });
-        
       } catch (err) {
         this.error = err.message || "Failed to authenticate";
       }
     },
-  },
-  async created() {
-    await this.urlDetailPage();
-    await this.save_fetchData();
   },
 };
 </script>

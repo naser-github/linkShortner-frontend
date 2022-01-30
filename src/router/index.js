@@ -42,6 +42,13 @@ const routes = [
     props: true,
   },
 
+  //profile
+  {
+    path: "/profile",
+    name: "profile",
+    component: () => import("../views/profile/index.vue"),
+  },
+
   //incase no url found
   { path: "/:notFound(.*)", redirect: "/homePage" },
 ];

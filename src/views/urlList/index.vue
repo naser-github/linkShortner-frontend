@@ -77,8 +77,8 @@
     </div>
     <editUrlModal
       :urlId="editUrlId"
-      v-show="isModalVisible"
       @close="closeModal"
+      :value="isModalVisible"
     />
   </section>
 </template>
@@ -134,6 +134,7 @@ export default {
     showModal(id) {
       this.editUrlId = id;
       this.isModalVisible = true;
+      // console.log(this.editUrlId, this.isModalVisible);
     },
     closeModal() {
       this.isModalVisible = false;
