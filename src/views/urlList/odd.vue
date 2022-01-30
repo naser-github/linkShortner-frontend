@@ -105,14 +105,6 @@ export default {
       pageSize: 2,
     };
   },
-  watch: {
-    currentSort() {
-      this.sortedList();
-    },
-    currentSortDir() {
-      this.sortedList();
-    },
-  },
 
   computed: {
     get_UrlList() {
@@ -120,7 +112,7 @@ export default {
     },
 
     show_urlList() {
-      return this.sortedList;
+      return this.sortedCats;
     },
   },
 
@@ -140,7 +132,7 @@ export default {
       this.$router.replace(`/url/${id}`);
     },
 
-    //modal functions
+    //modal function
     showModal(id) {
       this.editUrlId = id;
       this.isModalVisible = true;
@@ -157,7 +149,7 @@ export default {
       this.currentSort = s;
     },
 
-    sortedList: function () {
+    sortedCats: function () {
       return this.urlLists
         .sort((a, b) => {
           let modifier = 1;

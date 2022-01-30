@@ -19,6 +19,7 @@
     "vue-chart-3": "^3.0.9",
     "vue-chartjs": "^3.5.1",
     "vue-router": "^4.0.0-0",
+    "vue-tables-3": "^2.0.1-beta05",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
