@@ -14,9 +14,36 @@
               <table id="myTable" class="table table-striped table-hover">
                 <thead class="datatable-header-accent">
                   <tr>
-                    <th @click="sort('long_url')">Original Url</th>
-                    <th @click="sort('short_url')">Shortened Url</th>
-                    <th @click="sort('link_status')">Status</th>
+                    <th @click="sort('long_url')">
+                      Original Url
+                      <i
+                        :class="
+                          currentSortDir == 'asc'
+                            ? 'fas fa-arrow-up'
+                            : 'fas fa-arrow-down'
+                        "
+                      ></i>
+                    </th>
+                    <th @click="sort('short_url')">
+                      Shortened Url
+                      <i
+                        :class="
+                          currentSortDir == 'asc'
+                            ? 'fas fa-arrow-up'
+                            : 'fas fa-arrow-down'
+                        "
+                      ></i>
+                    </th>
+                    <th @click="sort('link_status')">
+                      Status
+                      <i
+                        :class="
+                          currentSortDir == 'asc'
+                            ? 'fas fa-arrow-up'
+                            : 'fas fa-arrow-down'
+                        "
+                      ></i>
+                    </th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -69,9 +96,9 @@
                 <button @click="nextPage">Next</button>
               </p>
 
-              debug: sort={{ currentSort }}, dir={{ currentSortDir }}, page={{
+              <!-- debug: sort={{ currentSort }}, dir={{ currentSortDir }}, page={{
                 currentPage
-              }}
+              }} -->
             </div>
           </div>
         </div>
