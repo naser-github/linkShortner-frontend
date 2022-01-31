@@ -11,7 +11,6 @@
                     <div class="card-body bg-gradient-light ">
                       <dashboard-graph
                         :devices="get_clientDevices"
-                        :key="$route.fullPath"
                       ></dashboard-graph>
                     </div>
                   </div>
@@ -43,10 +42,16 @@ export default {
     dashboardGraph,
   },
 
-  data() {
+  data(){
     return {
-      data: null,
-    };
+      clickData: null,
+    }
+  },
+
+  watch:{
+    clickData(val, oldVal){
+      console.log(val, oldVal);
+    }
   },
 
   computed: {
@@ -65,14 +70,15 @@ export default {
       } catch (err) {
         this.error = err.message || "Failed to shorten this url";
       }
+      await this.saveData();
     },
 
-    save_urlDetails() {
-      this.data = this.get_clicksDetails();
-    },
+    saveData(){
+      this.clickData = this.get_clientDevices();
+    }
   },
 
-  created() {
+  beforeMount() {
     this.dashboardPage();
   },
 };
