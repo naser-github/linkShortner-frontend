@@ -106,8 +106,9 @@
     </div>
     <editUrlModal
       :urlId="editUrlId"
-      @close="closeModal"
       :value="isModalVisible"
+      @close="closeModal"
+      @update-url="updateUrl"
     />
   </section>
 </template>
@@ -126,6 +127,7 @@ export default {
       editUrlId: null,
 
       urlLists: null,
+
       currentSort: "long_url",
       currentSortDir: "asc",
       currentPage: 1,
@@ -175,6 +177,15 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+    },
+    //emit
+    updateUrl(id, longUrl, shortUrl, status) {
+      const updatedUrl = this.urlLists.find((url) => url.id === id);
+      console.log(updatedUrl);
+      updatedUrl.long_url = longUrl;
+      updatedUrl.short_url = shortUrl;
+      updatedUrl.link_status = status;
+      console.log('after',updatedUrl);
     },
 
     sort(s) {

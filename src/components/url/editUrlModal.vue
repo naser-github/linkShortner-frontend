@@ -71,7 +71,7 @@
               type="submit"
               class="btn text-white"
               style="background: linear-gradient(45deg, #195647, #43a047)"
-              @click="close"
+              @click="closeAfterUpdate"
               aria-label="Close modal"
             >
               Update
@@ -109,6 +109,16 @@ export default {
   },
   methods: {
     close() {
+      this.$emit("close");
+    },
+    closeAfterUpdate() {
+      this.$emit(
+        "update-url",
+        this.urlId,
+        this.longUrl,
+        this.shortUrl,
+        this.status
+      );
       this.$emit("close");
     },
 
