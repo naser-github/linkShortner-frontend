@@ -15,11 +15,11 @@ export default {
         totalLinks: "",
       },
       clientDevices: {
-        desktop: 10,
-        mobile: 10,
-        others: 10,
+        desktop: 0,
+        mobile: 0,
+        others: 0,
       },
-    };
+    }; 
   },
   actions: {
     async dashboardPage(context) {

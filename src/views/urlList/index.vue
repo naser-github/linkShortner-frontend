@@ -4,13 +4,13 @@
       <div class="row">
         <div class="col-12">
           <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">
-                DataTable with minimal features &amp; hover style
+            <div class="card-header card-success card-outline mt-2">
+              <h3 class="card-title font-weight-bolder">
+                Url Lists
               </h3>
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
+            <div class="card-body card-success card-outline">
               <table id="myTable" class="table table-striped table-hover">
                 <thead class="datatable-header-accent">
                   <tr>
@@ -48,7 +48,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="url in get_UrlList" :key="url.id">
+                  <tr v-for="url in urlLists" :key="url.id">
                     <td @click="urlDetails(url.id)">
                       <span
                         class="badge badge-button bg-light text-white text-md"
@@ -91,9 +91,9 @@
                   </tr>
                 </tbody>
               </table>
-              <p>
-                <button @click="prevPage">Previous</button>
-                <button @click="nextPage">Next</button>
+              <p class="mt-2 text-right">
+                <button class="btn btn-success mr-2" @click="prevPage">Previous</button>
+                <button class="btn btn-success" @click="nextPage">Next</button>
               </p>
 
               <!-- debug: sort={{ currentSort }}, dir={{ currentSortDir }}, page={{
@@ -129,7 +129,7 @@ export default {
       currentSort: "long_url",
       currentSortDir: "asc",
       currentPage: 1,
-      pageSize: 2,
+      pageSize: 3,
     };
   },
   watch: {
@@ -139,6 +139,9 @@ export default {
     currentSortDir() {
       this.sortedList();
     },
+    currentPage(){
+      
+    }
   },
 
   computed: {
@@ -173,6 +176,7 @@ export default {
       this.isModalVisible = true;
       // console.log(this.editUrlId, this.isModalVisible);
     },
+
     closeModal() {
       this.isModalVisible = false;
     },
@@ -204,6 +208,7 @@ export default {
       if (this.currentPage * this.pageSize < this.urlLists.length)
         this.currentPage++;
     },
+
     prevPage() {
       if (this.currentPage > 1) this.currentPage--;
     },

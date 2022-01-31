@@ -96,6 +96,7 @@ export default {
     };
   },
   watch: {
+
     value(isActive) {
       if (isActive && this.urlId) {
         this.urlDetailPage();
