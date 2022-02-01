@@ -15,11 +15,13 @@ export default {
         shortUrl: "",
         status: "",
       },
+
       clickDetails: {
         avgClicks: 0,
         dailyClicks: 0,
         totalClicks: 0,
       },
+
       clientDevices: {
         desktop: 0,
         mobile: 0,
@@ -57,6 +59,7 @@ export default {
     },
 
     async urlDetails(context, payload) {
+
       const response = await axios
         .get(`${context.rootState.base_url}/url-details/${payload.id}`, {
           headers: {
@@ -75,7 +78,6 @@ export default {
       await context.commit("save_urlDetails", {
         link: responseData.link,
         deviceTypes: responseData.deviceTypes,
-        link_status: responseData.link_status,
 
         avgClicks: responseData.averageClicks,
         dailyClicks: responseData.dailyClicks,
@@ -159,15 +161,23 @@ export default {
       state.clickDetails.totalClicks = payload.totalClicks;
 
       // clientDevice
-      await payload.deviceTypes.forEach((device) => {
-        if (device.client_device == "desktop") {
-          state.clientDevices.desktop = device.total_client_device;
-        } else if (device.client_device == "mobile") {
-          state.clientDevices.mobile = device.total_client_device;
-        } else {
-          state.clientDevices.others = device.total_client_device;
-        }
-      });
+      if (payload.deviceTypes.length > 0) {
+        await payload.deviceTypes.forEach((device) => {
+          if (device.client_device == "desktop") {
+            state.clientDevices.desktop = device.total_client_device;
+          } else if (device.client_device == "mobile") {
+            state.clientDevices.mobile = device.total_client_device;
+          } else {
+            state.clientDevices.others = device.total_client_device;
+          }
+        });
+      } else {
+        console.log('g');
+        state.clientDevices.desktop = 0;
+        state.clientDevices.mobile = 0;
+        state.clientDevices.others = 0;
+      }
+
     },
 
     async update_urlDetails(state, payload) {

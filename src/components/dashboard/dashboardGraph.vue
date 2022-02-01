@@ -15,7 +15,6 @@ Chart.register(DoughnutController, ArcElement);
 
 const props = defineProps({
   devices: Object,
-  key: String,
 });
 
 const dataValues = ref([
@@ -23,7 +22,7 @@ const dataValues = ref([
   props.devices.mobile,
   props.devices.others,
 ]);
-console.log('props',dataValues);
+
 const data = computed(() => ({
   labels: ["Computer", "Mobile", "Others"],
 

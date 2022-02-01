@@ -7,7 +7,7 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-6">
-                  <div class="card">
+                  <div class="card card-dark card-outline">
                     <div class="card-body bg-gradient-light ">
                       <dashboard-graph
                         :devices="get_clientDevices" v-if="renderComponent"
@@ -19,9 +19,7 @@
                 <div class="col-4">
                   <dashboard-card :data="get_data"></dashboard-card>
                 </div>
-                <div class="col-1">
-                  {{ clickData }}
-                </div>
+                <div class="col-1"></div>
               </div>
             </div>
           </div>
