@@ -46,6 +46,8 @@ import("admin-lte/dist/js/adminlte.js");
 
 const app = createApp(App);
 
+// app.component('pagination', require('laravel-vue-pagination'));
+
 app.use(Toaster);
 app.use(VueAxios, axios);
 
