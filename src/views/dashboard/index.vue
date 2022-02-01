@@ -10,7 +10,7 @@
                   <div class="card">
                     <div class="card-body bg-gradient-light ">
                       <dashboard-graph
-                        :devices="get_clientDevices"
+                        :devices="get_clientDevices" v-if="renderComponent"
                       ></dashboard-graph>
                     </div>
                   </div>
@@ -19,7 +19,9 @@
                 <div class="col-4">
                   <dashboard-card :data="get_data"></dashboard-card>
                 </div>
-                <div class="col-1"></div>
+                <div class="col-1">
+                  {{ clickData }}
+                </div>
               </div>
             </div>
           </div>
@@ -44,13 +46,18 @@ export default {
 
   data(){
     return {
-      clickData: null,
+      clickData: {
+        desktop: null,
+        mobile: null,
+        others: null,
+      },
+      renderComponent: true
     }
   },
 
   watch:{
     clickData(val, oldVal){
-      console.log(val, oldVal);
+      console.log('watch',val, oldVal);
     }
   },
 
@@ -66,19 +73,23 @@ export default {
   methods: {
     async dashboardPage() {
       try {
-        this.$store.dispatch("dashboard/dashboardPage");
+        await this.$store.dispatch("dashboard/dashboardPage");
       } catch (err) {
         this.error = err.message || "Failed to shorten this url";
       }
-      await this.saveData();
+        this.renderComponent = false;
+        this.$nextTick(() => {
+          this.renderComponent = true;
+        });
+         await this.saveData();
     },
 
     saveData(){
-      this.clickData = this.get_clientDevices();
-    }
+      this.clickData = this.get_clientDevices;
+    },
   },
 
-  beforeMount() {
+  mounted() {
     this.dashboardPage();
   },
 };

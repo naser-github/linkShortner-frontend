@@ -1,5 +1,5 @@
 import axios from "axios";
-
+// import apiClient from "./interceptors/dashboard_interceptors";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({
   /* options */
@@ -45,6 +45,26 @@ export default {
         deviceTypes: responseData.deviceTypes,
       });
     },
+
+    // async dashboardPage(context) {
+    //   const response = await apiClient
+    //     .get('/dashboard')
+    //     .catch((err) => {
+    //       console.warn(err.response.data.message);
+    //       toaster.error(`${err.response.data.message}`, {
+    //         position: "top-right",
+    //       });
+    //     });
+
+    //   const responseData = await response.data;
+
+    //   context.commit("save_data", {
+    //     visitedToday: responseData.visitedToday,
+    //     linkToday: responseData.linkToday,
+    //     totalLinks: responseData.totalLinks,
+    //     deviceTypes: responseData.deviceTypes,
+    //   });
+    // },
   },
   getters: {
     get_clicksDetails(state) {

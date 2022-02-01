@@ -6,12 +6,12 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, defineProps, ref } from "vue";
+
 import { DoughnutChart } from "vue-chart-3";
+
 import { Chart, DoughnutController, ArcElement } from "chart.js";
 Chart.register(DoughnutController, ArcElement);
-
-import { defineProps } from "vue";
 
 const props = defineProps({
   devices: Object,
@@ -23,7 +23,7 @@ const dataValues = ref([
   props.devices.mobile,
   props.devices.others,
 ]);
-
+console.log('props',dataValues);
 const data = computed(() => ({
   labels: ["Computer", "Mobile", "Others"],
 
@@ -43,6 +43,7 @@ const options = ref({
     },
   },
 });
+ 
 </script>
 
 <style scoped>

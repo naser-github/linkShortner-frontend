@@ -109,9 +109,12 @@ export default {
     },
   },
   methods: {
+    //close the modal
     close() {
       this.$emit("close");
     },
+
+    //update & close the modal
     closeAfterUpdate() {
       this.$emit(
         "update-url",
@@ -123,6 +126,7 @@ export default {
       this.$emit("close");
     },
 
+    //
     async urlDetailPage() {
       try {
         await this.$store.dispatch("url/urlDetails", {
