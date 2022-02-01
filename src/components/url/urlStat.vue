@@ -86,9 +86,6 @@ export default {
   },
 
   watch: {
-    renderComponent(val, oldVal) {
-      console.log("renderComponent", val, oldVal);
-    },
     async id(val, oldVal) {
       if (val != oldVal) {
         await this.urlDetailPage(this.id);

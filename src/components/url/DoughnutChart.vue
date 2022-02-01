@@ -25,8 +25,6 @@ const dataValues = ref([
   props.devices.others,
 ]);
 
-console.log('props',dataValues);
-
 const data = computed(() => ({
   labels: ["Computer", "Mobile", "Others"],
 
