@@ -172,7 +172,6 @@ export default {
           }
         });
       } else {
-        console.log('g');
         state.clientDevices.desktop = 0;
         state.clientDevices.mobile = 0;
         state.clientDevices.others = 0;

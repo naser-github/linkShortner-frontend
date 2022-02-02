@@ -9,7 +9,7 @@
           <table id="myTable" class="table table-striped table-hover">
             <thead class="datatable-header-accent">
               <tr>
-                <th @click="sort('long_url')">
+                <th @click="sorted('long_url')">
                   Original Url
                   <i
                     :class="
@@ -19,7 +19,7 @@
                     "
                   ></i>
                 </th>
-                <th @click="sort('short_url')">
+                <th @click="sorted('short_url')">
                   Shortened Url
                   <i
                     :class="
@@ -29,7 +29,7 @@
                     "
                   ></i>
                 </th>
-                <th @click="sort('link_status')">
+                <th @click="sorted('link_status')">
                   Status
                   <i
                     :class="
@@ -43,7 +43,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="url in urlLists" :key="url.id">
+              <tr v-for="url in show_urlList()" :key="url.id">
                 <td @click="urlDetails(url.id)">
                   <span
                     class="badge badge-pill bg-light text-white text-md"
@@ -116,12 +116,14 @@ export default {
       isModalVisible: false,
       editUrlId: null,
 
-      urlLists: null,
-
+      urlLists: {
+        a: 'b',
+        b: 'a',
+      },
       currentSort: "long_url",
       currentSortDir: "asc",
       currentPage: 1,
-      pageSize: 3,
+      pageSize: 10,
     };
   },
   watch: {
@@ -182,36 +184,36 @@ export default {
       updatedUrl.link_status = status;
     },
 
-    sort(s) {
+    sorted(s) {
       if (s === this.currentSort) {
         this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
       }
       this.currentSort = s;
     },
 
-    sortedList: function () {
+    sortedList() {
       return this.urlLists.sort((a, b) => {
-        let modifier = 1;
-        if (this.currentSortDir === "desc") modifier = -1;
-        if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-        if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
-        return 0;
-      });
-      // .filter((row, index) => {
-      //   let start = (this.currentPage - 1) * this.pageSize;
-      //   let end = this.currentPage * this.pageSize;
-      //   if (index >= start && index < end) return true;
-      // });
+          let modifier = 1;
+          if (this.currentSortDir === "desc") modifier = -1;
+          if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+          if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+          return 0;
+        })
+        .filter((row, index) => {
+          let start = (this.currentPage - 1) * this.pageSize;
+          let end = this.currentPage * this.pageSize;
+          if (index >= start && index < end) return true;
+        });
     },
 
-    // nextPage() {
-    //   if (this.currentPage * this.pageSize < this.urlLists.length)
-    //     this.currentPage++;
-    // },
+    nextPage() {
+      if (this.currentPage * this.pageSize < this.urlLists.length)
+        this.currentPage++;
+    },
 
-    // prevPage() {
-    //   if (this.currentPage > 1) this.currentPage--;
-    // },
+    prevPage() {
+      if (this.currentPage > 1) this.currentPage--;
+    },
   },
 
   async created() {

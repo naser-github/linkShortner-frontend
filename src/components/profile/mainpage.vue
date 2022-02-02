@@ -1,6 +1,6 @@
 <template>
   <div class="col-md-12">
-    <div class="card card-success card-outline mt-4">
+    <div class="card card-dark card-outline mt-4">
       <div class="card-header">Edit Profile Details</div>
       <div class="card-body">
         <form class="form-horizontal" @submit.prevent="updateProfile">

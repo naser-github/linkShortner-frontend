@@ -1,86 +1,104 @@
 <template>
   <section class="content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">
-                DataTable with minimal features &amp; hover style
-              </h3>
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body">
-              <table id="myTable" class="table table-striped table-hover">
-                <thead class="datatable-header-accent">
-                  <tr>
-                    <th @click="sort('long_url')">Original Url</th>
-                    <th @click="sort('short_url')">Shortened Url</th>
-                    <th @click="sort('link_status')">Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="url in get_UrlList" :key="url.id">
-                    <td @click="urlDetails(url.id)">
-                      <span
-                        class="badge badge-button bg-light text-white text-md"
-                        style="border-left: 0.7rem solid #43a047"
-                      >
-                        {{ url.long_url.substring(0, 25) + ".." }}
-                      </span>
-                    </td>
-                    <td @click="urlDetails(url.id)">
-                      <span
-                        class="badge badge-button bg-light text-white text-md"
-                        style="border-left: 0.7rem solid #43a047"
-                      >
-                        {{ url.short_url }}
-                      </span>
-                    </td>
-                    <td @click="urlDetails(url.id)">
-                      <span
-                        class="badge-pill text-white"
-                        :style="
-                          url.link_status == 'active'
-                            ? 'background: linear-gradient(45deg,#195647,#43a047);'
-                            : 'background: linear-gradient(180deg,#828a91,#6c757d);}'
-                        "
-                      >
-                        {{ url.link_status }}
-                      </span>
-                    </td>
-                    <td>
-                      <button
-                        class="btn btn-sm text-white"
-                        style="
-                          background: linear-gradient(45deg, #195647, #43a047);
-                        "
-                        @click="showModal(url.id)"
-                      >
-                        <i class="far fa-edit"></i> Edit
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <p>
-                <button @click="prevPage">Previous</button>
-                <button @click="nextPage">Next</button>
-              </p>
-
-              debug: sort={{ currentSort }}, dir={{ currentSortDir }}, page={{
-                currentPage
-              }}
-            </div>
-          </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="card-header card-dark card-outline mt-2">
+          <h3 class="card-title font-weight-bolder">Url Lists</h3>
+        </div>
+        <div class="card-body card-dark card-outline">
+          <table id="myTable" class="table table-striped table-hover">
+            <thead class="datatable-header-accent">
+              <tr>
+                <th @click="sort('long_url')">
+                  Original Url
+                  <i
+                    :class="
+                      currentSortDir == 'asc'
+                        ? 'fas fa-arrow-up'
+                        : 'fas fa-arrow-down'
+                    "
+                  ></i>
+                </th>
+                <th @click="sort('short_url')">
+                  Shortened Url
+                  <i
+                    :class="
+                      currentSortDir == 'asc'
+                        ? 'fas fa-arrow-up'
+                        : 'fas fa-arrow-down'
+                    "
+                  ></i>
+                </th>
+                <th @click="sort('link_status')">
+                  Status
+                  <i
+                    :class="
+                      currentSortDir == 'asc'
+                        ? 'fas fa-arrow-up'
+                        : 'fas fa-arrow-down'
+                    "
+                  ></i>
+                </th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="url in urlLists" :key="url.id">
+                <td @click="urlDetails(url.id)">
+                  <span
+                    class="badge badge-pill bg-light text-white text-md"
+                    style="border-left: 0.7rem solid #43a047"
+                  >
+                    {{ url.long_url.substring(0, 25) + ".." }}
+                  </span>
+                </td>
+                <td @click="urlDetails(url.id)">
+                  <span
+                    class="badge badge-pill bg-light text-white text-md"
+                    style="border-left: 0.7rem solid #43a047"
+                  >
+                    {{ url.short_url }}
+                  </span>
+                </td>
+                <td @click="urlDetails(url.id)">
+                  <span
+                    class="badge-pill text-white"
+                    :style="
+                      url.link_status == 'active'
+                        ? 'background: linear-gradient(45deg,#195647,#43a047);'
+                        : 'background: linear-gradient(180deg,#828a91,#6c757d);}'
+                    "
+                  >
+                    {{ url.link_status }}
+                  </span>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-sm text-white"
+                    style="background: linear-gradient(45deg, #195647, #43a047)"
+                    @click="showModal(url.id)"
+                  >
+                    <i class="far fa-edit"></i> Edit
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="mt-2 text-right">
+            <button class="btn btn-success mr-2" @click="prevPage">
+              Previous
+            </button>
+            <button class="btn btn-success" @click="nextPage">Next</button>
+          </p>
         </div>
       </div>
     </div>
+
     <editUrlModal
       :urlId="editUrlId"
-      @close="closeModal"
       :value="isModalVisible"
+      @close="closeModal"
+      @update-url="updateUrl"
     />
   </section>
 </template>
@@ -99,11 +117,23 @@ export default {
       editUrlId: null,
 
       urlLists: null,
+
       currentSort: "long_url",
       currentSortDir: "asc",
       currentPage: 1,
-      pageSize: 2,
+      pageSize: 3,
     };
+  },
+  watch: {
+    currentSort() {
+      this.sortedList();
+    },
+    currentSortDir() {
+      this.sortedList();
+    },
+    currentPage(val) {
+      console.log(val);
+    },
   },
 
   computed: {
@@ -112,7 +142,7 @@ export default {
     },
 
     show_urlList() {
-      return this.sortedCats;
+      return this.sortedList;
     },
   },
 
@@ -132,14 +162,24 @@ export default {
       this.$router.replace(`/url/${id}`);
     },
 
-    //modal function
+    //modal functions
     showModal(id) {
       this.editUrlId = id;
       this.isModalVisible = true;
       // console.log(this.editUrlId, this.isModalVisible);
     },
+
     closeModal() {
       this.isModalVisible = false;
+    },
+
+    //emit
+    updateUrl(id, longUrl, shortUrl, status) {
+      const updatedUrl = this.urlLists.find((url) => url.id === id);
+      console.log(updatedUrl);
+      updatedUrl.long_url = longUrl;
+      updatedUrl.short_url = shortUrl;
+      updatedUrl.link_status = status;
     },
 
     sort(s) {
@@ -149,29 +189,29 @@ export default {
       this.currentSort = s;
     },
 
-    sortedCats: function () {
-      return this.urlLists
-        .sort((a, b) => {
-          let modifier = 1;
-          if (this.currentSortDir === "desc") modifier = -1;
-          if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-          if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
-          return 0;
-        })
-        .filter((row, index) => {
-          let start = (this.currentPage - 1) * this.pageSize;
-          let end = this.currentPage * this.pageSize;
-          if (index >= start && index < end) return true;
-        });
+    sortedList: function () {
+      return this.urlLists.sort((a, b) => {
+        let modifier = 1;
+        if (this.currentSortDir === "desc") modifier = -1;
+        if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        return 0;
+      });
+      // .filter((row, index) => {
+      //   let start = (this.currentPage - 1) * this.pageSize;
+      //   let end = this.currentPage * this.pageSize;
+      //   if (index >= start && index < end) return true;
+      // });
     },
 
-    nextPage() {
-      if (this.currentPage * this.pageSize < this.urlLists.length)
-        this.currentPage++;
-    },
-    prevPage() {
-      if (this.currentPage > 1) this.currentPage--;
-    },
+    // nextPage() {
+    //   if (this.currentPage * this.pageSize < this.urlLists.length)
+    //     this.currentPage++;
+    // },
+
+    // prevPage() {
+    //   if (this.currentPage > 1) this.currentPage--;
+    // },
   },
 
   async created() {
@@ -179,4 +219,3 @@ export default {
   },
 };
 </script>
-
